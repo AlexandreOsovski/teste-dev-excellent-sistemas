@@ -1,0 +1,80 @@
+/* Estilos Gerais */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  font-weight: bold;
+}
+
+/* Imagens */
+.image-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.image-input-group {
+  position: relative;
+  width: 180px;
+}
+
+.image-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.image-preview {
+  margin-top: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 150px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.btn-remove-image {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 5px;
+  font-size: 12px;
+}
+
+/* Botões */
+button[type="button"] {
+  margin-top: 10px;
+}
+
+/* Personalizando o botão de adicionar imagem */
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+/* Botão de envio */
+button[type="submit"] {
+  margin-top: 20px;
+  width: 100%;
+}

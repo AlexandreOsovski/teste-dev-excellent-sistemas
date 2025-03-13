@@ -1,0 +1,30 @@
+<a href="/cliente/cadastrar" class="btn btn-success mb-3">Cadastrar</a>
+
+<div class="border" style="border-radius: 8px;">
+  <table class="table text-center">
+    <thead>
+      <tr>
+        <th scope="col">#ID</th>
+        <th scope="col">CNPJ</th>
+        <th scope="col">Razão Social</th>
+        <th scope="col">E-mail</th>
+        <th scope="col">Status</th>
+        <th scope="col">Ação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cliente of clientes">
+        <td>{{ cliente.id }}</td>
+        <td>{{ cliente.cnpj }}</td>
+        <td>{{ cliente.razao_social }}</td>
+        <td>{{ cliente.email }}</td>
+        <td>{{ cliente.status_id }}</td>
+        <td class="d-flex justify-content-center">
+          <a href="/cliente/{{ cliente.id }}" class="btn btn-primary">Ver</a> <br />
+          <button (click)="excluirCliente(cliente.id)" class="btn btn-danger"
+            style="margin-left: 10px;">Excluir</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

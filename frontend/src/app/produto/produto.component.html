@@ -1,0 +1,39 @@
+<a href="/produto/cadastrar" class="btn btn-success mb-3">Cadastrar</a>
+
+<div class="border" style="border-radius: 8px;">
+  <table class="table text-center">
+    <thead>
+      <tr>
+        <th scope="col">#ID</th>
+        <th scope="col">Foto</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Valor</th>
+        <th scope="col">Desconto</th>
+        <th scope="col">Quantidade</th>
+        <th scope="col">Status</th>
+        <th scope="col">Ação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let produto of produtos">
+        <td>{{ produto.id }}</td>
+        <td>
+          <img style="width: 35px; height: 35px; border-radius: 10px;" [src]="baseUrl + produto.imagens[0]?.url"
+            alt="Produto Image" />
+        </td>
+
+
+        <td>{{ produto.nome }}</td>
+        <td>{{ produto.valor }}</td>
+        <td>{{ produto.desconto }}</td>
+        <td>{{ produto.quantidade_estoque }}</td>
+        <td>{{ produto.status }}</td>
+        <td class="d-flex justify-content-center">
+          <a href="/produto/{{ produto.id }}" class="btn btn-primary">Ver</a> <br />
+          <button (click)="excluirProduto(produto.id)" class="btn btn-danger"
+            style="margin-left: 10px;">Excluir</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

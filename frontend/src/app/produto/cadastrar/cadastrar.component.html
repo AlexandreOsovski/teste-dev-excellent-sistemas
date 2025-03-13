@@ -1,0 +1,79 @@
+<form [formGroup]="produtoForm" (ngSubmit)="perguntarSeDesejaSalvar()">
+  <div class="row">
+    <!-- Nome -->
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label for="nome">Nome</label>
+        <input id="nome" formControlName="nome" type="text" class="form-control" required>
+      </div>
+    </div>
+
+    <!-- Descrição -->
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <input id="descricao" formControlName="descricao" type="text" class="form-control" required>
+      </div>
+    </div>
+
+    <!-- Valor -->
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label for="valor">Valor</label>
+        <input id="valor" formControlName="valor" type="number" class="form-control" required>
+      </div>
+    </div>
+
+    <!-- Desconto -->
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label for="desconto">Desconto</label>
+        <input id="desconto" formControlName="desconto" type="number" class="form-control">
+      </div>
+    </div>
+
+    <!-- Quantidade em Estoque -->
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label for="quantidade_estoque">Quantidade em Estoque</label>
+        <input id="quantidade_estoque" formControlName="quantidade_estoque" type="number" class="form-control" required>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status" formControlName="status" class="form-control">
+          <option value="ativo">Ativo</option>
+          <option value="inativo">Inativo</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Imagens -->
+    <div class="col-12">
+      <div class="form-group">
+        <label for="imagens">Imagens</label>
+        <div formArrayName="imagens" class="image-container">
+          <div *ngFor="let image of imagens.controls; let i = index" [formGroupName]="i" class="image-input-group">
+            <div class="image-upload">
+              <input type="file" (change)="onFileChange($event, i)" class="form-control"
+                [attr.required]="i === 0 ? true : null">
+              <div *ngIf="image.value" class="image-preview">
+                <img [src]="image.value" alt="Imagem carregada" class="preview-image">
+                <button type="button" (click)="removeImage(i)" class="btn btn-danger btn-remove-image">Remover</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary" (click)="addImage()">Adicionar Imagem</button>
+      </div>
+    </div>
+
+    <!-- Botão de Cadastrar -->
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary" [disabled]="produtoForm.invalid">Cadastrar Produto</button>
+    </div>
+  </div>
+</form>

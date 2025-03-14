@@ -22,16 +22,17 @@ export class PedidoController {
     }
 
     @Post('cadastrar')
-    postpedido(@Body() body: Partial<Pedido>): any {
-        return this.pedidoService.createPedido(body);
+    postpedido(@Body() body: { pedidoData: Partial<Pedido>, items: any[] }): any {
+        const { pedidoData, items } = body;
+        return this.pedidoService.createPedido(pedidoData, items);
     }
 
-    @Put(':id')
+    @Put('alterar/:id')
     updatepedido(@Param('id') id: number, @Body() body: Partial<Pedido>): Promise<Pedido | null> {
         return this.pedidoService.updatePedido(id, body);
     }
 
-    @Delete(':id')
+    @Delete('deletar/:id')
     deletepedido(@Param('id') id: number): Promise<void> {
         return this.pedidoService.deletePedido(id);
     }

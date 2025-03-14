@@ -3,8 +3,6 @@ import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } fr
 import { CommonModule } from '@angular/common';
 import { UtilService } from '../../utils/UtilService';
 import Swal from 'sweetalert2';
-
-import { HttpClient } from '@angular/common/http';
 import { debounceTime, switchMap } from 'rxjs/operators';
 
 @Component({
@@ -18,8 +16,7 @@ export class CadastrarComponent implements OnInit {
   clienteForm: FormGroup;
   constructor(
     private utils: UtilService,
-    private fb: FormBuilder,
-    private http: HttpClient
+    private fb: FormBuilder
   ) {
 
     this.clienteForm = this.fb.group({
@@ -34,13 +31,13 @@ export class CadastrarComponent implements OnInit {
   ngOnInit(): void {
 
     this.clienteForm.get('cnpj')?.valueChanges.subscribe((value) => {
-      const cnpjComMascara = this.mascaraCnpj(value);
+      const cnpjComMascara = this.utils.mascaraCnpj(value);
       this.clienteForm.get('cnpj')?.setValue(cnpjComMascara, { emitEvent: false });
     });
 
     this.clienteForm.get('cnpj')?.valueChanges.pipe(
       debounceTime(500),
-      switchMap(cnpj => this.buscarDadosCnpj(cnpj))
+      switchMap(cnpj => this.utils.buscarDadosCnpj(cnpj))
     ).subscribe(dados => {
       if (dados && dados.razao_social) {
         console.log(dados);
@@ -56,34 +53,6 @@ export class CadastrarComponent implements OnInit {
     this.utils.cardSweetAlert('Salvar cliente', 'Deseja salvar o cliente?', true, () => this.salvarCliente(), 'Sim, Cadastrar!');
   }
 
-  buscarDadosCnpj(cnpj: string) {
-    const cnpjSemCaracteresEspeciais = cnpj.replace(/\D/g, '');
-    if (cnpjSemCaracteresEspeciais.length === 14) {
-      return this.http.get<any>(`https://publica.cnpj.ws/cnpj/${cnpjSemCaracteresEspeciais}`);
-    } else {
-      return [];
-    }
-  }
-
-
-  mascaraCnpj(cnpj: string): string {
-    let cnpjLimpo = cnpj.replace(/\D/g, '');
-
-    if (cnpjLimpo.length <= 2) {
-      return cnpjLimpo;
-    } else if (cnpjLimpo.length <= 5) {
-      return cnpjLimpo.replace(/(\d{2})(\d{1})/, '$1.$2');
-    } else if (cnpjLimpo.length <= 8) {
-      return cnpjLimpo.replace(/(\d{2})(\d{3})(\d{1})/, '$1.$2.$3');
-    } else if (cnpjLimpo.length <= 12) {
-      return cnpjLimpo.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/, '$1.$2.$3/$4');
-    } else if (cnpjLimpo.length <= 14) {
-      return cnpjLimpo.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
-    }
-    return cnpjLimpo;
-  }
-
-
   async salvarCliente() {
     if (this.clienteForm.valid) {
       const request = await this.utils.postRequest('cliente/cadastrar', this.clienteForm.value);
@@ -92,8 +61,9 @@ export class CadastrarComponent implements OnInit {
         Swal.fire('Sucesso!', 'Cliente Cadastrado com sucesso')
         window.location.href = '/cliente';
       } else {
-        Swal.fire('Opss...', 'Houve um erro ao cadastrar o produto.')
+        Swal.fire('Opss...', 'Houve um erro ao cadastrar o cliente.')
       }
     }
   }
+
 }

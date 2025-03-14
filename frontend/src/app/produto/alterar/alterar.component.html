@@ -1,1 +1,61 @@
-<p>alterar works!</p>
+<form [formGroup]="produtoForm" (ngSubmit)="perguntarSeDesejaSalvar()">
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label for="nome">Nome</label>
+        <input id="nome" formControlName="nome" type="text" class="form-control" required>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <input id="descricao" formControlName="descricao" type="text" class="form-control" required>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label for="valor">Valor</label>
+        <input id="valor" formControlName="valor" type="number" class="form-control" required>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label for="desconto">Desconto</label>
+        <input id="desconto" formControlName="desconto" type="number" class="form-control">
+      </div>
+    </div>
+
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label for="quantidade_estoque">Quantidade em Estoque</label>
+        <input id="quantidade_estoque" formControlName="quantidade_estoque" type="number" class="form-control" required>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="form-group">
+        <label for="imagens">Imagens</label>
+        <div formArrayName="imagens" class="image-container">
+          <div *ngFor="let image of imagens.controls; let i = index" [formGroupName]="i" class="image-input-group">
+            <div class="image-upload">
+              <input type="file" (change)="onFileChange($event, i)" class="form-control"
+                [attr.required]="i === 0 ? true : null">
+              <div *ngIf="image.get('url')?.value" class="image-preview">
+                <img [src]="image.get('url')?.value" alt="Imagem carregada" class="preview-image">
+                <button type="button" (click)="removeImage(i)" class="btn btn-danger btn-remove-image">Remover</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary" (click)="addImage()">Adicionar Imagem</button>
+      </div>
+    </div>
+
+    <div class="col-12 mt-5">
+      <button type="submit" class="btn btn-primary" [disabled]="produtoForm.invalid">Cadastrar Produto</button>
+    </div>
+  </div>
+</form>

@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Cliente } from '../../cliente/entities/cliente.entity';
-import { Produto } from '../../produto/entities/produto.entity';
+import { ItemPedido } from './items_pedido.entity';
 
 @Entity()
 export class Pedido {
@@ -8,24 +8,8 @@ export class Pedido {
     id: number;
 
     @ManyToOne(() => Cliente, { eager: true })
-    @JoinColumn({ name: 'idcliente' })
+    @JoinColumn({ name: 'id_cliente' })
     cliente: Cliente;
-
-    @ManyToOne(() => Produto, { eager: true })
-    @JoinColumn({ name: 'idproduto' })
-    produto: Produto;
-
-    @Column()
-    quantidade: number;
-
-    @Column('decimal', { precision: 10, scale: 2 })
-    total: number;
-
-    @Column('decimal', { precision: 10, scale: 2 })
-    total_desconto: number;
-
-    @Column('decimal', { precision: 10, scale: 2 })
-    valor_unitario: number;
 
     @Column({ default: 'pendente' })
     status: string;
@@ -35,4 +19,8 @@ export class Pedido {
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
     dataAlterado: Date;
+
+    @OneToMany(() => ItemPedido, (itemPedido) => itemPedido.id_pedido)
+    itens: ItemPedido[];
 }
+

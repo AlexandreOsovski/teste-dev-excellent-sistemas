@@ -1,1 +1,32 @@
-<p>alterar works!</p>
+<form [formGroup]="clienteForm" (ngSubmit)="perguntarSeDesejaAlterar()">
+  <div class="row">
+    <!-- Nome -->
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label for="nome">CNPJ</label>
+        <input id="cnpj" formControlName="cnpj" type="text" class="form-control" maxlength="18" required>
+      </div>
+    </div>
+
+    <!-- Descrição -->
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label for="razao_social">Razão Social</label>
+        <input id="razao_social" formControlName="razao_social" type="text" class="form-control" required>
+      </div>
+    </div>
+
+    <!-- Valor -->
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input id="email" formControlName="email" type="email" class="form-control" required>
+      </div>
+    </div>
+
+    <!-- Botão de Cadastrar -->
+    <div class="col-12 mt-5">
+      <button type="submit" class="btn btn-primary" [disabled]="clienteForm.invalid">Alterar Cliente</button>
+    </div>
+  </div>
+</form>

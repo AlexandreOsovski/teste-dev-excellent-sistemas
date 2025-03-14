@@ -40,8 +40,25 @@ export class ProdutoService {
     }
 
     async getProdutoById(id: number): Promise<Produto | null> {
-        return this.produtoRepository.findOne(({ where: { id } }));
+        return this.produtoRepository
+            .createQueryBuilder('produto')
+            .leftJoinAndSelect('produto.imagens', 'imagens')
+            .select([
+                'produto.id',
+                'produto.nome',
+                'produto.descricao',
+                'produto.valor',
+                'produto.desconto',
+                'produto.quantidade_estoque',
+                'produto.status',
+                'produto.dataCriado',
+                'produto.dataAlterado',
+                'imagens.url',
+            ])
+            .where('produto.id = :id', { id })
+            .getOne();
     }
+
 
     async createProduto(produtoData: Partial<Produto>, photos: string[]): Promise<any> {
         console.log(photos)

@@ -15,6 +15,7 @@ import { PedidoService } from './pedido/service/pedido.service';
 import { ProdutoImagem } from './produto/entities/produtoImagem.entity';
 import { Pedido } from './pedido/entities/pedido.entity';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { ItemPedido } from './pedido/entities/items_pedido.entity';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     }),
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
     }),
     TypeOrmModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
@@ -33,12 +35,12 @@ import { ServeStaticModule } from '@nestjs/serve-static';
         username: configService.get<string>('DATABASE_USERNAME'),
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
-        entities: [Cliente, Produto, ProdutoImagem],
+        entities: [Cliente, Produto, ProdutoImagem, Pedido, ItemPedido],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Cliente, Produto, ProdutoImagem, Pedido]),
+    TypeOrmModule.forFeature([Cliente, Produto, ProdutoImagem, Pedido, ItemPedido]),
   ],
   controllers: [ClienteController, ProdutoController, PedidoController],
   providers: [AppService, ProdutoService, ClienteService, PedidoService],

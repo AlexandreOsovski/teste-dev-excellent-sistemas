@@ -15,12 +15,9 @@ services:
       context: ./frontend
     container_name: frontend
     ports:
-      - "4200:4200"
+      - "4200:80"
     depends_on:
       - backend
-    volumes:
-      - ./frontend:/app
-    command: ["npm", "run", "start"]
 
   db:
     image: mysql:latest

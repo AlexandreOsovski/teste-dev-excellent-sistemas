@@ -1,1 +1,91 @@
-<p>alterar works!</p>
+<div class="container mt-5">
+  <div *ngIf="isLoading" class="text-center mt-5">
+    <p>Carregando dados do pedido...</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger text-center">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="pedidos && !isLoading">
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="card-title mb-0">Detalhes do Pedido</h5>
+      </div>
+      <div class="card-body">
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Cliente</span>
+          <input type="text" class="form-control" [value]="pedidos.cliente.razao_social" readonly>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">CNPJ</span>
+          <input type="text" class="form-control" [value]="pedidos.cliente.cnpj" readonly>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Status</span>
+          <input type="text" class="form-control" [value]="pedidos.status" readonly>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Data de Criação</span>
+          <input type="text" class="form-control" [value]="pedidos.dataCriado | date: 'dd/MM/yyyy HH:mm'" readonly>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header bg-secondary text-white">
+        <h5 class="card-title mb-0">Itens do Pedido</h5>
+      </div>
+      <div class="card-body">
+        <div *ngIf="pedidos.itens && pedidos.itens.length > 0">
+          <div *ngFor="let item of pedidos.itens" class=" mb-2 border p-3 rounded">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">Produto</span>
+                  <input type="text" class="form-control" [value]="item.id_produto.nome" readonly>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">Quantidade</span>
+                  <input type="text" class="form-control" [value]="item.quantidade" readonly>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">Valor Unitário</span>
+                  <input type="text" class="form-control" [value]="item.valor_unitario | currency: 'BRL'" readonly>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">Total</span>
+                  <input type="text" class="form-control" [value]="item.total | currency: 'BRL'" readonly>
+                </div>
+              </div>
+
+              <!-- <div class="col-md-6">
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">Desconto</span>
+                  <input type="text" class="form-control" [value]="item.total_desconto | currency: 'BRL'" readonly>
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!pedidos.itens || pedidos.itens.length === 0" class="text-center">
+          <p>Nenhum item encontrado para este pedido.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

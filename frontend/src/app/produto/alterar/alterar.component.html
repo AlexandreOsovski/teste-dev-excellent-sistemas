@@ -17,14 +17,16 @@
     <div class="col-md-6 col-sm-12">
       <div class="form-group">
         <label for="valor">Valor</label>
-        <input id="valor" formControlName="valor" type="number" class="form-control" required>
+        <input id="valor" formControlName="valor" type="text" class="form-control" required mask="separator.2"
+          thousandSeparator="." decimalMarker=",">
       </div>
     </div>
 
     <div class="col-md-6 col-sm-12">
       <div class="form-group">
         <label for="desconto">Desconto</label>
-        <input id="desconto" formControlName="desconto" type="number" class="form-control">
+        <input id="desconto" formControlName="desconto" type="text" class="form-control" mask="separator.2"
+          thousandSeparator="." decimalMarker=",">
       </div>
     </div>
 
@@ -35,27 +37,40 @@
       </div>
     </div>
 
-    <div class="col-12">
-      <div class="form-group">
-        <label for="imagens">Imagens</label>
-        <div formArrayName="imagens" class="image-container">
-          <div *ngFor="let image of imagens.controls; let i = index" [formGroupName]="i" class="image-input-group">
-            <div class="image-upload">
-              <input type="file" (change)="onFileChange($event, i)" class="form-control"
-                [attr.required]="i === 0 ? true : null">
-              <div *ngIf="image.get('url')?.value" class="image-preview">
-                <img [src]="image.get('url')?.value" alt="Imagem carregada" class="preview-image">
-                <button type="button" (click)="removeImage(i)" class="btn btn-danger btn-remove-image">Remover</button>
+    <div class="col-12 mt-3">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Imagens do Produto</h5>
+        </div>
+        <div class="card-body">
+          <div formArrayName="imagens" class="row">
+            <div *ngFor="let image of imagens.controls; let i = index" [formGroupName]="i"
+              class="col-md-4 col-sm-6 mb-3">
+              <div class="card image-card">
+                <div class="card-body">
+                  <div class="image-upload">
+                    <input type="file" (change)="onFileChange($event, i)" class="form-control"
+                      [attr.required]="i === 0 ? true : null">
+                    <div *ngIf="image.get('url')?.value" class="image-preview mt-2">
+                      <img style="width: 200px; height: 200px;" [src]="image.get('url')?.value" alt="Imagem carregada"
+                        class="img-fluid preview-image">
+                      <button *ngIf="i !== 0" type="button" (click)="removeImage(i)"
+                        class="btn btn-danger btn-sm btn-remove-image mt-2">
+                        Remover
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+          <button type="button" class="btn btn-secondary mt-3" (click)="addImage()">Adicionar Imagem</button>
         </div>
-        <button type="button" class="btn btn-secondary" (click)="addImage()">Adicionar Imagem</button>
       </div>
     </div>
 
     <div class="col-12 mt-5">
-      <button type="submit" class="btn btn-primary" [disabled]="produtoForm.invalid">Cadastrar Produto</button>
+      <button type="submit" class="btn btn-primary" [disabled]="produtoForm.invalid">Alterar Produto</button>
     </div>
   </div>
 </form>

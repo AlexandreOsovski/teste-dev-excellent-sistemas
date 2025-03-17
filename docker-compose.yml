@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   backend:
     build:
@@ -5,19 +7,19 @@ services:
     container_name: backend
     ports:
       - "8080:8080"
-    depends_on:
-      - db
     environment:
       - DATABASE_URL=mysql://root:root@db:3306/excellent_dev_teste
-
-  frontend:
-    build:
-      context: ./frontend
-    container_name: frontend
-    ports:
-      - "4200:80"
     depends_on:
-      - backend
+      - db
+
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #   container_name: frontend
+  #   ports:
+  #     - "4200:5000"  # Alterado para 5000 (porta do serve)
+  #   depends_on:
+  #     - backend
 
   db:
     image: mysql:latest

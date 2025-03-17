@@ -34,7 +34,7 @@
         <td>{{ produto.quantidade_estoque }}</td>
         <td>{{ produto.status }}</td>
         <td class="d-flex justify-content-center">
-          <a href="/produto/{{ produto.id }}" class="btn btn-primary">Ver</a> <br />
+          <a href="/produto/alterar/{{ produto.id }}" class="btn btn-primary">Ver</a> <br />
           <button (click)="excluirProduto(produto.id)" class="btn btn-danger"
             style="margin-left: 10px;">Excluir</button>
         </td>

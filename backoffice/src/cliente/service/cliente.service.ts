@@ -12,6 +12,11 @@ export class ClienteService {
         private appService: AppService
     ) { }
 
+    /**
+     * Cria um novo cliente com os dados fornecidos.
+     * @param {Partial<Cliente>} clienteData - Dados do cliente a serem criados.
+     * @returns {Promise<Cliente | string>} Mensagem de sucesso ou erro.
+     */
     async createCliente(clienteData: Partial<Cliente>): Promise<Cliente | string> {
         const cnpj = clienteData.cnpj;
         const email = clienteData.email;
@@ -46,14 +51,29 @@ export class ClienteService {
         return this.appService.message("sucesso", 201, "Cliente criado com sucesso");
     }
 
+    /**
+     * Obtém todos os clientes cadastrados.
+     * @returns {Promise<Cliente[]>} Uma lista de clientes.
+     */
     async getClientes(): Promise<Cliente[]> {
         return this.clienteRepository.find();
     }
 
+    /**
+     * Obtém um cliente específico pelo seu ID.
+     * @param {number} id - O ID do cliente a ser buscado.
+     * @returns {Promise<Cliente | null>} O cliente encontrado ou null se não existir.
+     */
     async getClienteById(id: number): Promise<Cliente | null> {
         return this.clienteRepository.findOne({ where: { id } });
     }
 
+    /**
+     * Atualiza os dados de um cliente existente.
+     * @param {number} id - O ID do cliente a ser atualizado.
+     * @param {Partial<Cliente>} clienteData - Novos dados do cliente.
+     * @returns {Promise<any>} Mensagem de sucesso ou erro.
+     */
     async updateCliente(id: number, clienteData: Partial<Cliente>): Promise<any> {
         const cliente = await this.getClienteById(id);
 
@@ -67,6 +87,11 @@ export class ClienteService {
         return this.appService.message("sucesso", 200, "Cliente atualizado com sucesso");
     }
 
+    /**
+     * Exclui um cliente pelo seu ID.
+     * @param {number} id - O ID do cliente a ser excluído.
+     * @returns {Promise<any>} Mensagem de sucesso ou erro.
+     */
     async deleteCliente(id: number): Promise<any> {
         const cliente = await this.getClienteById(id);
 

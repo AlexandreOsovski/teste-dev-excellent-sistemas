@@ -29,9 +29,10 @@ export class ProdutoController {
     @Put('alterar/:id')
     async updateProduto(
         @Param('id') id: number,
-        @Body() body: Partial<Produto>
+        @Body() body: { produto: Partial<Produto>, photos: string[] }
     ): Promise<Produto | null> {
-        return this.produtoService.updateProduto(id, body);
+        const { produto, photos } = body;
+        return this.produtoService.updateProduto(id, produto, photos);
     }
 
     @Delete('deletar/:id')

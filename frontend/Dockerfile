@@ -1,13 +1,19 @@
-# Etapa de construção
-FROM node:20 AS build
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+# # Etapa de build
+# FROM node:20 AS build
+# WORKDIR /app
+# COPY package.json package-lock.json ./
+# RUN npm install
+# COPY . .
+# RUN ng build --prod
 
-FROM nginx:alpine
-COPY --from=build /app/dist/frontend/ /usr/share/nginx/html
+# # Etapa de produção
+# FROM node:20
+# WORKDIR /app
+# COPY --from=build /app/dist/frontend ./dist
+# RUN npm install -g serve
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# # Expor a porta do frontend
+# EXPOSE 5000
+
+# # Comando para rodar o serve
+# CMD ["serve", "-s", "dist", "-l", "5000"]

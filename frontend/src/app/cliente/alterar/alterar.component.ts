@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { UtilService } from '../../utils/UtilService';
 import Swal from 'sweetalert2';
-import { ActivatedRoute } from '@angular/router';  // Importando o ActivatedRoute
+import { ActivatedRoute } from '@angular/router';
 
 import { debounceTime, switchMap } from 'rxjs/operators';
 

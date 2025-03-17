@@ -5,6 +5,7 @@ import { UtilService } from '../../utils/UtilService';
 import Swal from 'sweetalert2';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../utils/env';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 interface Produto {
   id: number;
@@ -18,17 +19,17 @@ interface Produto {
   imagens: { url: string }[];
 }
 
-
 @Component({
   selector: 'app-alterar',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, NgxMaskDirective, NgxMaskPipe],
+  providers: [provideNgxMask()],
   templateUrl: './alterar.component.html',
   styleUrl: './alterar.component.scss'
 })
 export class AlterarComponent implements OnInit {
   produtoForm: FormGroup;
-  clienteId: string | undefined;
+  produtoId: string | undefined;
 
   constructor(
     private utils: UtilService,
@@ -41,15 +42,15 @@ export class AlterarComponent implements OnInit {
       valor: [null, [Validators.required]],
       desconto: [null],
       quantidade_estoque: [null, [Validators.required]],
-      imagens: this.fb.array([]) // FormArray para imagens
+      imagens: this.fb.array([])
     });
   }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      const id = params['id'];
-      if (id) {
-        this.buscarProduto(id);
+      this.produtoId = params['id'];
+      if (this.produtoId) {
+        this.buscarProduto(this.produtoId);
       }
     });
   }
@@ -58,8 +59,6 @@ export class AlterarComponent implements OnInit {
     try {
       const response = await this.utils.getRequest<Produto>('produto/' + id, {});
       const produto = response.data;
-      console.log(produto)
-
       this.produtoForm.patchValue({
         id: produto.id,
         nome: produto.nome,
@@ -68,7 +67,6 @@ export class AlterarComponent implements OnInit {
         desconto: produto.desconto,
         quantidade_estoque: produto.quantidade_estoque
       });
-
       this.setImagens(produto.imagens);
     } catch (error) {
       console.error('Erro ao buscar produto:', error);
@@ -86,8 +84,6 @@ export class AlterarComponent implements OnInit {
     });
   }
 
-
-
   get imagens() {
     return (this.produtoForm.get('imagens') as FormArray);
   }
@@ -101,7 +97,7 @@ export class AlterarComponent implements OnInit {
       reader.onload = () => {
         const imagensFormArray = this.produtoForm.get('imagens') as FormArray;
         imagensFormArray.at(index).patchValue({
-          imagemUrl: reader.result as string
+          url: reader.result as string
         });
       };
 
@@ -112,7 +108,7 @@ export class AlterarComponent implements OnInit {
   addImage() {
     const imagensFormArray = this.produtoForm.get('imagens') as FormArray;
     imagensFormArray.push(this.fb.group({
-      imagemUrl: ['']
+      url: ['']
     }));
   }
 
@@ -122,6 +118,45 @@ export class AlterarComponent implements OnInit {
   }
 
   perguntarSeDesejaSalvar() {
+    Swal.fire({
+      title: 'Deseja salvar as alterações?',
+      showCancelButton: true,
+      confirmButtonText: 'Salvar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.salvarProduto();
+      }
+    });
+  }
 
+  converterParaNumero(valorFormatado: string): number {
+    if (!valorFormatado) return 0;
+    const valorNumerico = parseFloat(
+      valorFormatado.replace(/\./g, '').replace(',', '.')
+    );
+    return valorNumerico;
+  }
+
+  async salvarProduto() {
+    if (this.produtoForm.invalid) {
+      Swal.fire('Erro', 'Preencha todos os campos obrigatórios', 'error');
+      return;
+    }
+
+    const produtoData = this.produtoForm.value;
+    const imagens = produtoData.imagens.map((imagem: { url: string }) => imagem.url.replace(environment.apiUrl, ''));
+
+    try {
+      const response = await this.utils.putRequest(`produto/alterar/${this.produtoId}`, {
+        produto: produtoData,
+        photos: imagens
+      });
+
+      Swal.fire('Sucesso', 'Produto atualizado com sucesso', 'success');
+    } catch (error) {
+      console.error('Erro ao salvar produto:', error);
+      Swal.fire('Erro', 'Ocorreu um erro ao salvar o produto', 'error');
+    }
   }
 }
